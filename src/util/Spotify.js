@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-let accessToken ='BQC8K8vNdI5DZHh9Y6NHEE2ZIeWg9TO2lCYLyyMWdz5cPKB-AK7MAx9_ytA2AD2wNrMkA0SSxa7Cj_H31YWR7lpaCmfI2a7j7YD8iTRDYQCbF_0W4Zuyi5cKP1OqEwIfRPKJDDRUP2U-PA2etfNAEkDjJ_vFO3m5pfFkCz_wkRj3JUe3_--OZxUsWeBON9FcmktMSNUMyux2ulzJ_VBjEc5k7alp9jo';
+let accessToken ='BQAEFnJ6skWnZzFfH6Ss-EGG1qQVLBma8dqnnbiHSot2FfkKINM_u0842whADXgvz2W9OvSpyvptBleqjbtV7POGt1PPgFW5qEnmzXxqKflolWvcPtXXCB4SIzUeZv9XqRpcLyFqBgjA5ZcDYFyAdBT_l8C4cCNppRspdaEjOKDUn_PmCpr1_o2kstmvkUcFw8Yele7SiuJgTiB7h9KlRmfWUpDnnDY';
 const client_id = '685f7f8b86e14e1a99c0c5e73be6e08b';
 const client_secret = 'b428d041dbe6404eb9947e03c8dd0d41';
 const user_id= '217bjavfgp3l4na3ej4v7ptvy';  'spotify:user:217bjavfgp3l4na3ej4v7ptvy'
 const redirect_uri='http://knowing-error.surge.sh';
 
-export class Spotify extends React.Component {
+class Spotify extends React.Component {
 
-/* also not working
+/*
   getAccessToken() {
          if (accessToken) {
              return accessToken;
@@ -27,7 +27,7 @@ export class Spotify extends React.Component {
              resolve => resolve(accessToken)
          );
      }
-*/
+
  //my original code (not working) - key is harded coded in right now.
   getAccessToken(){
     if(accessToken) {
@@ -44,17 +44,44 @@ export class Spotify extends React.Component {
     });
     window.setTimeout(() => accessToken = '', expiresIn * 1000);
     window.history.pushState('Access Token', null, '/');
+    return accessToken;
+    }
+  }
+*/
+
+  getAccessToken(){
+    if(accessToken) {
+      return accessToken;
+    } else {
+     let scopes = 'playlist-modify-private%20playlist-modify-public'
+     fetch(`https://accounts.spotify.com/authorize/?client_id=${client_id}&response_type=code&redirect_uri=https%3A%2F%2Fexample.com%2Fcallback&scope=${scopes}&state=34fFs29kd09`)
+
+    app.get('/login', function(req, res) {
+    ;
+    res.redirect('https://accounts.spotify.com/authorize' +
+      '?response_type=token' +
+      '&client_id=' + client_id +
+      (scopes ? '&scope=' + encodeURIComponent(scopes) : '') +
+      '&state=123' +
+      '&redirect_uri=' + redirect_uri);
+    });
+    window.setTimeout(() => accessToken = '', expiresIn * 1000);
+    window.history.pushState('Access Token', null, '/');
+    return accessToken;
     }
   }
 
 
   //search  will return an object with a whole bunch of songs in it.  This gets passed to the method searchSpotify in App.js
   search(term) {
+    let currentAccessToken = this.getAccessToken();
+    let headerAuthorization = `Bearer ${currentAccessToken}`;
+
     return(
       //find endpoints here: https://developer.spotify.com/web-api/endpoint-reference/
       fetch(`https://api.spotify.com/v1/search?q=${term}&type=track`,
             {headers:
-              {Authorization: `Bearer ${accessToken}`}
+              {Authorization: headerAuthorization}
             }
       ).then(response=>{
         if(response.ok){
@@ -84,7 +111,7 @@ export class Spotify extends React.Component {
 
   savePlaylist(playlistName, trackURIs){
     if(playlistName && trackURIs){
-      let currentAccessToken = getAccessToken();
+      let currentAccessToken = this.getAccessToken();
       let headerAuthorization = `Bearer ${currentAccessToken}`;
       let userID = '';
       let playlistID = '';
@@ -151,3 +178,5 @@ export class Spotify extends React.Component {
        } else { return }
      }
   }
+
+export default Spotify;

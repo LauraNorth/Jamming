@@ -5,14 +5,13 @@ import TrackList from '../TrackList/TrackList.js'
 //this is a child of app.js
 //it's job is to render the results from the search bar.
 
-export class SearchResults extends React.Component {
+class SearchResults extends React.Component {
   componentDidMount(){
-   console.log(this);
+    console.log("tester");
+   console.log(this.props);
   }
 
   render(){
-  //  console.log(this.props.searchResults); (not working)
-//let searchResults = this.props.searchResults ? this.props.searchResults : [];
     return (
       <div className="SearchResults">
         <h2>Results</h2>
@@ -21,3 +20,5 @@ export class SearchResults extends React.Component {
     )
   }
 }
+
+export default SearchResults;

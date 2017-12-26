@@ -4,7 +4,7 @@ import TrackList from '../TrackList/TrackList.js'
 
 //this is a child of App.js
 //its job is to render the Title and the list of songs chosen to be in the playlist
-export class PlayList extends React.Component{
+class PlayList extends React.Component{
   constructor(props){
     super(props);
     this.state={};
@@ -26,3 +26,5 @@ export class PlayList extends React.Component{
     )
   }
 }
+
+export default PlayList;
