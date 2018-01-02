@@ -38,12 +38,12 @@ class App extends Component {
   }
 
 
+//this calls the search method in Spotify.js
   searchSpotify(term){
     const newSearch = new Spotify();
     newSearch.search(term).then(tracks=>{
       this.setState({searchResults: tracks});
-      console.log(this.state.searchResults); //(working)
-    })
+      })
   }
 
 
